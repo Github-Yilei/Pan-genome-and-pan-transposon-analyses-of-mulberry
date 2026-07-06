@@ -36,6 +36,24 @@ with open(input_file, 'r') as gff3:
             else:
                 gff_dict[gff_key].append(gff_value)
 
+        elif line.startswith('Chr'):
+            line_spl = line.split("\t")
+            line_spl[1] = 'PASA'
+            gff_value = '\t'.join(line_spl[:-1]) + "\tPlaceholders"
+
+            if line_spl[2] == 'gene':
+                chrom = line_spl[0]
+                start = line_spl[3]
+                end = line_spl[4]
+
+                gff_key = chrom + '_' + start +'_' + end
+                temp = {'chrom' : chrom, 'start' : start, 'end' : end}
+
+                uniq_id_list.append(temp)
+                gff_dict[gff_key] = [gff_value]
+            else:
+                gff_dict[gff_key].append(gff_value)
+
         elif line.startswith('#PROT'):
             pep_spl = line.split("\t")
             pep_seq = pep_spl[1]
@@ -47,6 +65,7 @@ with open(input_file, 'r') as gff3:
             elif len(pep_seq) > len(temp_pep):
                 temp_pep = 'represnt_pep' + "\t" + pep_seq
                 gff_dict[gff_key][-1] = temp_pep
+
 # sort keys
 sorted_list = sorted(uniq_id_list, key=lambda k: (k['chrom'], int(k['start'])))
 

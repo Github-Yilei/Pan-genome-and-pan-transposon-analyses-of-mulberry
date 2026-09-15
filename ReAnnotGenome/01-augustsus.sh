@@ -3,7 +3,7 @@
 #PBS -o QsubLog.log
 #PBS -e QsubLog.err
 #PBS -q wuyileiQueue
-#PBS -l nodes=node03:ppn=24
+#PBS -l nodes=node02:ppn=12
 #PBS -l mem=40GB
 
 
@@ -19,26 +19,25 @@ SampleList=/data_group/wuyilei/Project/ReAnnotGenome/samples.list
 IFS=$'\r\n' GLOBIGNORE='*' command eval  'ARRAY=($(cat $SampleList))'
 sampleID=`echo ${ARRAY[(($PBS_ARRAY_INDEX-1))]}`
 
-
 source activate vep_env
-seqkit split -i ${sampleID}.genome.fasta.new.masked -O Split
+seqkit split -i ../${sampleID}.genome.fasta.new.masked -O ${sampleID}_Split
 
 # parallel working
 source activate lzf_py36_env
-ls Split | while read name;
+ls ${sampleID}_Split | while read name;
 do
-echo "augustus --species=arabidopsis --gff3=on --softmasking=1 --UTR=on Split/${name} > ${name}.gff " >> cmd.list;
+echo "augustus --species=arabidopsis --gff3=on --softmasking=1 --UTR=on ${sampleID}_Split/${name} > ${name}.gff" >> ${sampleID}.cmd.list;
 done
 
-ParaFly -c cmd.list -CPU 24
+/opt/service/miniconda3/envs/r4_py37_env/bin/ParaFly -c ${sampleID}.cmd.list -CPU 12
 
-ls Split | while read name;
+ls ${sampleID}_Split | while read name;
 do
-cat ${name}.gff | perl /opt/service/miniconda3/envs/lzf_py36_env/bin/join_aug_pred.pl | grep -v '^#' >> temp.joined.gff;
+cat ${name}.gff | perl /opt/service/miniconda3/envs/lzf_py36_env/bin/join_aug_pred.pl | grep -v '^#' >> ${sampleID}.joined.gff;
 done
 
 
 source activate vep_env
-bedtools sort -i temp.joined.gff > ${sampleID}.gff3
-
-rm -rf Split
+bedtools sort -i ${sampleID}.joined.gff > ${sampleID}.gff3
+rm *joined.gff
+rm -rf *_Split

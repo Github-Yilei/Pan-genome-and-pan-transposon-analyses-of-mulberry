@@ -21,7 +21,7 @@ cd /data_group/wuyilei/Project/ReAnnotGenome/06-EVM/Morus_atropurpurea
 source activate py27
 
 /opt/service/miniconda3/envs/py27/opt/evidencemodeler-1.1.1/EvmUtils/partition_EVM_inputs.pl \
-        --genome /data_group/wuyilei/Project/ReAnnotGenome/Morus_atropurpurea.genome.fasta.mod.MAKER.masked \
+        --genome /data_group/wuyilei/Project/ReAnnotGenome/Morus_atropurpurea.genome.fasta.new.masked \
         --gene_predictions ../Morus_atropurpurea.gene_predictions.gff3 \
         --protein_alignments ../Morus_atropurpurea.genomethreader.gff3 \
         --transcript_alignments ../Morus_atropurpurea.transcript_alignments.gff3 \
@@ -33,7 +33,7 @@ source activate py27
 
 /opt/service/miniconda3/envs/py27/opt/evidencemodeler-1.1.1/EvmUtils/write_EVM_commands.pl \
     --weights /data_group/wuyilei/Project/ReAnnotGenome/06-EVM/Morus_atropurpurea/weights.txt \
-    --genome /data_group/wuyilei/Project/ReAnnotGenome/Morus_atropurpurea.genome.fasta.mod.MAKER.masked \
+    --genome /data_group/wuyilei/Project/ReAnnotGenome/Morus_atropurpurea.genome.fasta.new.masked \
     --gene_predictions ../Morus_atropurpurea.gene_predictions.gff3 \
     --protein_alignments ../Morus_atropurpurea.genomethreader.gff3 \
         --transcript_alignments ../Morus_atropurpurea.transcript_alignments.gff3 \
@@ -46,4 +46,4 @@ source activate py27
         --partitions partitions_list.out --output_file_name evm.out
 /opt/service/miniconda3/envs/py27/opt/evidencemodeler-1.1.1/EvmUtils/convert_EVM_outputs_to_GFF3.pl \
         --partitions partitions_list.out --output evm.out \
-        --genome /data_group/wuyilei/Project/ReAnnotGenome/Morus_atropurpurea.genome.fasta.mod.MAKER.masked
+        --genome /data_group/wuyilei/Project/ReAnnotGenome/Morus_atropurpurea.genome.fasta.new.masked
